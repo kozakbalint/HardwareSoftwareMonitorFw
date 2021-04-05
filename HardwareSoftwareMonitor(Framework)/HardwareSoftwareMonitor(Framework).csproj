@@ -55,6 +55,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="src\Cpu.cs" />
+    <Compile Include="src\Disk.cs" />
+    <Compile Include="src\Drive.cs" />
+    <Compile Include="src\Gpu.cs" />
+    <Compile Include="src\InstalledApp.cs" />
+    <Compile Include="src\MotherBoard.cs" />
+    <Compile Include="src\Ram.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
