@@ -8,6 +8,7 @@ using System.Linq;
 using System.IO;
 using OpenHardwareMonitor;
 using OpenHardwareMonitor.Hardware;
+using System.Windows.Threading;
 
 namespace HardwareSoftwareMonitor_Framework_
 {
@@ -27,6 +28,7 @@ namespace HardwareSoftwareMonitor_Framework_
         List<Drive> drives = new List<Drive>();
         MotherBoard mb;
         Computer computer;
+        DispatcherTimer timer;
 
         public MainWindow()
         {
@@ -39,6 +41,10 @@ namespace HardwareSoftwareMonitor_Framework_
             softDG.ItemsSource = apps;
             computer = new Computer() { CPUEnabled = true };
             computer.Open();
+            timer = new DispatcherTimer();
+            timer.Interval = new TimeSpan(0,0,3);
+            timer.Tick += Timer_Tick;
+            timer.Start();
             GetInstalledApps();
             GetCpuInfos();
             GetGpuInfos();
@@ -48,6 +54,34 @@ namespace HardwareSoftwareMonitor_Framework_
             GetDriveInfos();
             FillComboBoxes();
             FillHardwareData();
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            GetCpuSensorValues();
+        }
+
+        private void GetCpuSensorValues()
+        {
+            string tempContent = "";
+            foreach (var hardwareItem in computer.Hardware)
+            {
+                if (hardwareItem.HardwareType == HardwareType.CPU)
+                {
+                    hardwareItem.Update();
+                    foreach (IHardware subHardware in hardwareItem.SubHardware)
+                        subHardware.Update();
+                
+                    foreach (var sensor in hardwareItem.Sensors)
+                    {
+                        if (sensor.SensorType == SensorType.Temperature)
+                        {
+                            tempContent += String.Format("{0} Temperature = {1}°C\r\n", sensor.Name, sensor.Value.HasValue ? sensor.Value.Value.ToString() : "no value");
+                        }
+                    }
+                }
+            }
+            cpuTemp.Content = tempContent;
         }
 
         private void FillHardwareData()
@@ -191,20 +225,6 @@ namespace HardwareSoftwareMonitor_Framework_
                 cpus.Add(new Cpu(item["Name"].ToString(), item["Manufacturer"].ToString(), Convert.ToInt32(item["NumberOfCores"]), Convert.ToInt32(item["ThreadCount"])));
             }
             searcher = null;
-
-            foreach (var hardwareItem in computer.Hardware)
-            {
-                if (hardwareItem.HardwareType == HardwareType.CPU)
-                {
-                    foreach (var sensor in hardwareItem.Sensors)
-                    {
-                        if (sensor.SensorType == SensorType.Temperature)
-                        {
-                            cpuTemp.Content = $"{sensor.Name} Temp: {sensor.Value}\r\n";
-                        }
-                    }
-                }
-            }
         }
 
         private void GetInstalledApps()
