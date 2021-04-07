@@ -114,5 +114,8 @@
   <ItemGroup>
     <None Include="lib\OpenHardwareMonitorLib.dll" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="save\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

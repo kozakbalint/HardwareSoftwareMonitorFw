@@ -1,13 +1,12 @@
 ﻿using HardwareSoftwareMonitor_Framework_.src;
-using System.Collections.Generic;
-using System.Windows;
-using System.Management;
 using Microsoft.Win32;
-using System;
-using System.Linq;
-using System.IO;
-using OpenHardwareMonitor;
 using OpenHardwareMonitor.Hardware;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Management;
+using System.Windows;
 using System.Windows.Threading;
 
 namespace HardwareSoftwareMonitor_Framework_
@@ -29,6 +28,7 @@ namespace HardwareSoftwareMonitor_Framework_
         MotherBoard mb;
         Computer computer;
         DispatcherTimer timer;
+        StreamWriter sw;
 
         public MainWindow()
         {
@@ -39,10 +39,10 @@ namespace HardwareSoftwareMonitor_Framework_
         private void Init()
         {
             softDG.ItemsSource = apps;
-            computer = new Computer() { CPUEnabled = true };
+            computer = new Computer() { CPUEnabled = true, GPUEnabled = true, MainboardEnabled = true, RAMEnabled = true, HDDEnabled = true };
             computer.Open();
             timer = new DispatcherTimer();
-            timer.Interval = new TimeSpan(0,0,3);
+            timer.Interval = new TimeSpan(0, 0, 1);
             timer.Tick += Timer_Tick;
             timer.Start();
             GetInstalledApps();
@@ -59,29 +59,156 @@ namespace HardwareSoftwareMonitor_Framework_
         private void Timer_Tick(object sender, EventArgs e)
         {
             GetCpuSensorValues();
+            GetGpuSensorValues();
+            GetMbSensorValues();
+            GetRamSensorValues();
+            GetHddSensorValues();
+        }
+
+        private void GetHddSensorValues()
+        {
+            string tempContent = "Temp:\n";
+            foreach (var hardwareItem in computer.Hardware)
+            {
+                if (hardwareItem.HardwareType == HardwareType.HDD)
+                {
+                    hardwareItem.Update();
+                    foreach (var sensor in hardwareItem.Sensors)
+                    {
+                        if (sensor.SensorType == SensorType.Temperature)
+                        {
+                            tempContent += $"{sensor.Name} = {sensor.Value.Value}°C\r\n";
+                        }
+                    }
+                }
+            }
+            hddTemp.Content = tempContent;
+        }
+
+        private void GetRamSensorValues()
+        {
+            string loadContent = "Load:\n";
+            foreach (var hardwareItem in computer.Hardware)
+            {
+                if (hardwareItem.HardwareType == HardwareType.RAM)
+                {
+                    hardwareItem.Update();
+                    foreach (IHardware subHardware in hardwareItem.SubHardware)
+                        subHardware.Update();
+
+                    foreach (var sensor in hardwareItem.Sensors)
+                    {
+                        if (sensor.SensorType == SensorType.Load)
+                        {
+                            loadContent += $"{sensor.Name} = {Math.Round(sensor.Value.Value,1)}%\r\n";
+                        }
+                    }
+                }
+            }
+            ramLoad.Content = loadContent;
+        }
+
+        private void GetMbSensorValues()
+        {
+            string tempContent = "Temp:\n";
+            string voltContent = "Voltage:\n";
+            string fanContent = "Fan Speed:\n";
+            foreach (var hardwareItem in computer.Hardware)
+            {
+                if (hardwareItem.HardwareType == HardwareType.Mainboard)
+                {
+                    hardwareItem.Update();
+                    foreach (IHardware subHardware in hardwareItem.SubHardware)
+                    {
+                        subHardware.Update();
+
+                        foreach (var sensor in subHardware.Sensors)
+                        {
+                            if (sensor.SensorType == SensorType.Temperature)
+                            {
+                                tempContent += $"{sensor.Name} = {sensor.Value.Value}°C\r\n";
+                            }
+                            else if (sensor.SensorType == SensorType.Voltage)
+                            {
+                                voltContent += $"{sensor.Name} = {Math.Round(sensor.Value.Value, 2)}V\r\n";
+                            }
+                            else if (sensor.SensorType == SensorType.Fan)
+                            {
+                                fanContent += $"{sensor.Name} = {Math.Round(sensor.Value.Value, 0)}RPM\r\n";
+                            }
+                        }
+                    }
+                }
+                mbTemp.Content = tempContent;
+                mbVolt.Content = voltContent;
+                mbFan.Content = fanContent;
+            }
+        }
+
+        private void GetGpuSensorValues()
+        {
+            string tempContent = "Temp:\n";
+            string loadContent = "Load:\n";
+            string clockContent = "Speed:\n";
+            foreach (var hardwareItem in computer.Hardware)
+            {
+                if (hardwareItem.HardwareType == HardwareType.GpuNvidia || hardwareItem.HardwareType == HardwareType.GpuAti)
+                {
+                    hardwareItem.Update();
+
+                    foreach (var sensor in hardwareItem.Sensors)
+                    {
+                        if (sensor.SensorType == SensorType.Temperature)
+                        {
+                            tempContent += $"{sensor.Name} = {sensor.Value.Value}°C\r\n";
+                        }
+                        else if (sensor.SensorType == SensorType.Load)
+                        {
+                            loadContent += $"{sensor.Name} = {Math.Round(sensor.Value.Value, 1)}%\r\n";
+                        }
+                        else if (sensor.SensorType == SensorType.Clock)
+                        {
+                            clockContent += $"{sensor.Name} = {Math.Round(sensor.Value.Value, 1)}Mhz\r\n";
+                        }
+                    }
+                }
+                gpuTemp.Content = tempContent;
+                gpuLoad.Content = loadContent;
+                gpuClock.Content = clockContent;
+            }
         }
 
         private void GetCpuSensorValues()
         {
-            string tempContent = "";
+            string tempContent = "Temp:\n";
+            string loadContent = "Load:\n";
+            string clockContent = "Speed:\n";
             foreach (var hardwareItem in computer.Hardware)
             {
                 if (hardwareItem.HardwareType == HardwareType.CPU)
                 {
                     hardwareItem.Update();
-                    foreach (IHardware subHardware in hardwareItem.SubHardware)
-                        subHardware.Update();
-                
+
                     foreach (var sensor in hardwareItem.Sensors)
                     {
                         if (sensor.SensorType == SensorType.Temperature)
                         {
-                            tempContent += String.Format("{0} Temperature = {1}°C\r\n", sensor.Name, sensor.Value.HasValue ? sensor.Value.Value.ToString() : "no value");
+                            tempContent += $"{sensor.Name} = {sensor.Value.Value}°C\r\n";
+                        }
+                        else if (sensor.SensorType == SensorType.Load)
+                        {
+                            loadContent += $"{sensor.Name} = {Math.Round(sensor.Value.Value, 1)}%\r\n";
+                        }
+                        else if (sensor.SensorType == SensorType.Clock)
+                        {
+                            clockContent += $"{sensor.Name} = {Math.Round(sensor.Value.Value, 1)}Mhz\r\n";
                         }
                     }
                 }
             }
             cpuTemp.Content = tempContent;
+            cpuLoad.Content = loadContent;
+            cpuClock.Content = clockContent;
         }
 
         private void FillHardwareData()
@@ -285,6 +412,49 @@ namespace HardwareSoftwareMonitor_Framework_
         private void Cb_SelectionChange(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             FillHardwareData();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            SavePrograms();
+            SaveHardwareInfo();
+        }
+
+        private void SaveHardwareInfo()
+        {
+            sw = new StreamWriter("../../save/hardware_save.csv");
+            sw.WriteLine($"{mb.Manufacturer},{mb.Product}");
+            foreach (var item in cpus)
+            {
+                sw.WriteLine($"{item.Name},{item.Manufacturer},{item.Cores},{item.Threads}");
+            }
+            foreach (var item in gpus)
+            {
+                sw.WriteLine($"{item.Name};{item.Vram},{item.HorizontalRes},{item.VerticalRes},{item.RefreshRate}");
+            }
+            foreach (var item in rams)
+            {
+                sw.WriteLine($"{item.Name},{item.Manufacturer},{item.Tag},{item.Capacity}");
+            }
+            foreach (var item in disks)
+            {
+                sw.WriteLine($"{item.Manufacturer},{item.InterfaceType},{item.Size}");
+            }
+            foreach (var item in drives)
+            {
+                sw.WriteLine($"{item.RootDir},{item.FileSystem},{item.TotalSize},{item.AvailableSpace}");
+            }
+            sw.Close();
+        }
+
+        private void SavePrograms()
+        {
+            sw = new StreamWriter("../../save/app_save.csv");
+            foreach (var item in apps)
+            {
+                sw.WriteLine($"{item.Name},{item.Version}");
+            }
+            sw.Close();
         }
     }
 }

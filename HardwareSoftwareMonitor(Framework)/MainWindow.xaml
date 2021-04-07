@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HardwareSoftwareMonitor_Framework_"
         mc:Ignorable="d"
-        Title="Hardware Software Monitor" MinHeight="700" MinWidth="800">
+        Title="Hardware Software Monitor" MinHeight="500" MinWidth="800"
+        Closing="Window_Closing">
 
     <TabControl>
         <TabItem Header="Hardware Infos">
@@ -46,7 +47,7 @@
 
 
                 <!--MotherBoard-->
-                <Label Content="MotherBoard:" Grid.Row="1" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="18"/>
+                <Label Content="Motherboard:" Grid.Row="1" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="18"/>
                 <Label x:Name="mbManufacturer" Content="Manufacturer:" Grid.Row="1" HorizontalAlignment="Left" Margin="10,44,0,0" VerticalAlignment="Top" FontSize="14"/>
                 <Label x:Name="mbProduct" Content="Product:" Grid.Row="1" HorizontalAlignment="Left" Margin="10,73,0,0" VerticalAlignment="Top" FontSize="14"/>
 
@@ -67,22 +68,6 @@
                 <Label x:Name="driveAvailableSpace" Content="Available Space:" Grid.Row="1" HorizontalAlignment="Left" Margin="10,131,0,0" VerticalAlignment="Top" FontSize="14" Grid.Column="2"/>
             </Grid>
         </TabItem>
-        <TabItem Header="Software List">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="10*"></RowDefinition>
-                    <RowDefinition Height="80*"></RowDefinition>
-                    <RowDefinition Height="10*"></RowDefinition>
-                </Grid.RowDefinitions>
-                <Label Content="Installed Applications:" HorizontalAlignment="Left" Margin="10,22,0,0" VerticalAlignment="Top" FontSize="18"/>
-                <DataGrid x:Name="softDG" Grid.Row="1" Margin="10,0,10,0" AutoGenerateColumns="False">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Name" Binding="{Binding Path=Name}" Width="80*"/>
-                        <DataGridTextColumn Header="Version" Binding="{Binding Path=Version}" Width="20*"/>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </Grid>
-        </TabItem>
         <TabItem Header="Sensor Values">
             <ScrollViewer>
                 <Grid>
@@ -92,21 +77,57 @@
                         <ColumnDefinition Width="50*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="50*"></RowDefinition>
-                        <RowDefinition Height="50*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
 
                     <!--CPU-->
                     <Label Content="CPU:" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="18"/>
-                    <ComboBox HorizontalAlignment="Left" Margin="132,16,0,0" VerticalAlignment="Top" Width="120"/>
                     <Label x:Name="cpuTemp" Content="Temp:" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="10,49,0,0" VerticalAlignment="Top" FontSize="14"/>
+                    <Label x:Name="cpuLoad" Content="Load:" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="10,49,0,0" VerticalAlignment="Top" FontSize="14"/>
+                    <Label x:Name="cpuClock" Content="Speed:" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" Margin="10,49,0,0" VerticalAlignment="Top" FontSize="14"/>
+
 
                     <!--GPU-->
                     <Label Content="GPU:" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="18"/>
-                    <ComboBox HorizontalAlignment="Left" Margin="132,16,0,0" VerticalAlignment="Top" Width="120" Grid.Row="1"/>
+                    <Label x:Name="gpuTemp" Content="Temp:" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Margin="10,49,0,0" VerticalAlignment="Top" FontSize="14"/>
+                    <Label x:Name="gpuLoad" Content="Load:" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Margin="10,49,0,0" VerticalAlignment="Top" FontSize="14"/>
+                    <Label x:Name="gpuClock" Content="Speed:" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" Margin="10,49,0,0" VerticalAlignment="Top" FontSize="14"/>
 
+                    <!--Mb-->
+                    <Label Content="Motherboard:" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="18"/>
+                    <Label x:Name="mbTemp" Content="Temp:" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" Margin="10,49,0,0" VerticalAlignment="Top" FontSize="14"/>
+                    <Label x:Name="mbVolt" Content="Voltage:" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Margin="10,49,0,0" VerticalAlignment="Top" FontSize="14"/>
+                    <Label x:Name="mbFan" Content="Fan Speed:" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Left" Margin="10,49,0,0" VerticalAlignment="Top" FontSize="14"/>
+
+                    <!--RAM-->
+                    <Label Content="RAM:" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="18"/>
+                    <Label x:Name="ramLoad" Content="Load:" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Left" Margin="10,49,0,0" VerticalAlignment="Top" FontSize="14"/>
+
+                    <!--HDD-->
+                    <Label Content="HDD:" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="18"/>
+                    <Label x:Name="hddTemp" Content="Temp:" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Left" Margin="10,49,0,0" VerticalAlignment="Top" FontSize="14"/>
                 </Grid>
             </ScrollViewer>
+        </TabItem>
+        <TabItem Header="Software List">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="10*"></RowDefinition>
+                    <RowDefinition Height="80*"></RowDefinition>
+                    <RowDefinition Height="10*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Label Content="Installed Applications:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="18"/>
+                <DataGrid x:Name="softDG" Grid.Row="1" Margin="10,0,10,0" AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Path=Name}" Width="80*"/>
+                        <DataGridTextColumn Header="Version" Binding="{Binding Path=Version}" Width="20*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
         </TabItem>
     </TabControl>
 </Window>
