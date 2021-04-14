@@ -100,7 +100,7 @@ namespace HardwareSoftwareMonitor_Framework_
                     {
                         if (sensor.SensorType == SensorType.Load)
                         {
-                            loadContent += $"{sensor.Name} = {Math.Round(sensor.Value.Value,1)}%\r\n";
+                            loadContent += $"{sensor.Name} = {Math.Round(sensor.Value.Value, 1)}%\r\n";
                         }
                     }
                 }
