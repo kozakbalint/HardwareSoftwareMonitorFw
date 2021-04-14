@@ -31,6 +31,8 @@
                     <Label x:Name="cpuManufacturer" Content="Manufacturer:" Grid.Row="0" HorizontalAlignment="Left" Margin="10,73,0,0" VerticalAlignment="Top" FontSize="14"/>
                     <Label x:Name="cpuCores" Content="Cores:" Grid.Row="0" HorizontalAlignment="Left" Margin="10,102,0,0" VerticalAlignment="Top" FontSize="14"/>
                     <Label x:Name="cpuThreads" Content="Thread:" Grid.Row="0" HorizontalAlignment="Left" Margin="10,131,0,0" VerticalAlignment="Top" FontSize="14"/>
+                    <Label x:Name="cpul2size" Content="L2 Chache:" Grid.Row="0" HorizontalAlignment="Left" Margin="10,160,0,0" VerticalAlignment="Top" FontSize="14"/>
+                    <Label x:Name="cpul3size" Content="L3 Chache:" Grid.Row="0" HorizontalAlignment="Left" Margin="10,189,0,0" VerticalAlignment="Top" FontSize="14"/>
 
                     <!--GPU-->
                     <Label Content="GPU:" Grid.Row="1"  HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="18"/>

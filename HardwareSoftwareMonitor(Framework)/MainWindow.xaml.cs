@@ -221,6 +221,8 @@ namespace HardwareSoftwareMonitor_Framework_
                 cpuManufacturer.Content = $"Manufacturer: {currCpu.Manufacturer}";
                 cpuCores.Content = $"Cores: {currCpu.Cores}";
                 cpuThreads.Content = $"Threads: {currCpu.Threads}";
+                cpul2size.Content = $"L2 Chache: {currCpu.L2Size / 1024} MB";
+                cpul3size.Content = $"L3 Chache: {currCpu.L3Size / 1024} MB";
 
                 //GPU
                 Gpu currGpu = gpus.Where(x => x.Name == gpuCb.SelectedItem.ToString()).First();
@@ -349,7 +351,7 @@ namespace HardwareSoftwareMonitor_Framework_
             searcher = new ManagementObjectSearcher("SELECT * FROM Win32_Processor");
             foreach (var item in searcher.Get())
             {
-                cpus.Add(new Cpu(item["Name"].ToString(), item["Manufacturer"].ToString(), Convert.ToInt32(item["NumberOfCores"]), Convert.ToInt32(item["ThreadCount"])));
+                cpus.Add(new Cpu(item["Name"].ToString(), item["Manufacturer"].ToString(), Convert.ToInt32(item["NumberOfCores"]), Convert.ToInt32(item["ThreadCount"]), Convert.ToInt32(item["L2CacheSize"]), Convert.ToInt32(item["L3CacheSize"])));
             }
             searcher = null;
         }
@@ -426,7 +428,7 @@ namespace HardwareSoftwareMonitor_Framework_
             sw.WriteLine($"{mb.Manufacturer},{mb.Product}");
             foreach (var item in cpus)
             {
-                sw.WriteLine($"{item.Name},{item.Manufacturer},{item.Cores},{item.Threads}");
+                sw.WriteLine($"{item.Name},{item.Manufacturer},{item.Cores},{item.Threads},{item.L2Size},{item.L3Size}");
             }
             foreach (var item in gpus)
             {

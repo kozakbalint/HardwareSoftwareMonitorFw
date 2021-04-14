@@ -34,12 +34,32 @@
             set { threads = value; }
         }
 
-        public Cpu(string name, string manufacturer, int cores, int threads)
+        private int l2size;
+
+        public int L2Size
+        {
+            get { return l2size; }
+            set { l2size = value; }
+        }
+
+        private int l3size;
+
+        public int L3Size
+        {
+            get { return l3size; }
+            set { l3size = value; }
+        }
+
+
+
+        public Cpu(string name, string manufacturer, int cores, int threads, int l2size, int l3size)
         {
             this.name = name;
             this.manufacturer = manufacturer;
             this.cores = cores;
             this.threads = threads;
+            this.l2size = l2size;
+            this.l3size = l3size;
         }
     }
 }
