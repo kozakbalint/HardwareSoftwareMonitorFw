@@ -5,68 +5,72 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HardwareSoftwareMonitor_Framework_"
         mc:Ignorable="d"
-        Title="Hardware Software Monitor" MinHeight="500" MinWidth="800"
+        Title="Hardware Software Monitor" MinHeight="500" MinWidth="600" Width="700"
         Closing="Window_Closing">
 
     <TabControl>
         <TabItem Header="Hardware Infos">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="50*"></ColumnDefinition>
-                    <ColumnDefinition Width="50*"></ColumnDefinition>
-                    <ColumnDefinition Width="50*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="50*"></RowDefinition>
-                    <RowDefinition Height="50*"></RowDefinition>
-                </Grid.RowDefinitions>
+            <ScrollViewer>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
 
-                <!--CPU-->
-                <Label Content="CPU:" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="18"/>
-                <ComboBox x:Name="cpuCb" HorizontalAlignment="Left" Margin="132,16,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="Cb_SelectionChange"/>
-                <Label x:Name="cpuName" Content="Name:" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="10,44,0,0" VerticalAlignment="Top" FontSize="14"/>
-                <Label x:Name="cpuManufacturer" Content="Manufacturer:" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="10,73,0,0" VerticalAlignment="Top" FontSize="14"/>
-                <Label x:Name="cpuCores" Content="Cores:" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="10,102,0,0" VerticalAlignment="Top" FontSize="14"/>
-                <Label x:Name="cpuThreads" Content="Thread:" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="10,131,0,0" VerticalAlignment="Top" FontSize="14"/>
+                    <!--CPU-->
+                    <Label Content="CPU:" Grid.Row="0" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="18"/>
+                    <ComboBox x:Name="cpuCb" HorizontalAlignment="Left" Margin="132,16,0,0" VerticalAlignment="Top" Width="150" SelectionChanged="Cb_SelectionChange"/>
+                    <Label x:Name="cpuName" Content="Name:" Grid.Row="0" HorizontalAlignment="Left" Margin="10,44,0,0" VerticalAlignment="Top" FontSize="14"/>
+                    <Label x:Name="cpuManufacturer" Content="Manufacturer:" Grid.Row="0" HorizontalAlignment="Left" Margin="10,73,0,0" VerticalAlignment="Top" FontSize="14"/>
+                    <Label x:Name="cpuCores" Content="Cores:" Grid.Row="0" HorizontalAlignment="Left" Margin="10,102,0,0" VerticalAlignment="Top" FontSize="14"/>
+                    <Label x:Name="cpuThreads" Content="Thread:" Grid.Row="0" HorizontalAlignment="Left" Margin="10,131,0,0" VerticalAlignment="Top" FontSize="14"/>
 
-                <!--GPU-->
-                <Label Content="GPU:" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="18"/>
-                <ComboBox x:Name="gpuCb" HorizontalAlignment="Left" Margin="132,16,0,0" VerticalAlignment="Top" Width="120" Grid.Column="1" SelectionChanged="Cb_SelectionChange"/>
-                <Label x:Name="gpuName" Content="Name:" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="10,44,0,0" VerticalAlignment="Top" FontSize="14"/>
-                <Label x:Name="gpuVram" Content="VRAM:" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="10,73,0,0" VerticalAlignment="Top" FontSize="14"/>
-                <Label x:Name="gpuResolution" Content="Resolution:" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="10,102,0,0" VerticalAlignment="Top" FontSize="14"/>
-                <Label x:Name="gpuRefreshRate" Content="Refresh Rate:" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="10,131,0,0" VerticalAlignment="Top" FontSize="14"/>
+                    <!--GPU-->
+                    <Label Content="GPU:" Grid.Row="1"  HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="18"/>
+                    <ComboBox x:Name="gpuCb" Grid.Row="1" HorizontalAlignment="Left" Margin="132,16,0,0" VerticalAlignment="Top" Width="150" SelectionChanged="Cb_SelectionChange"/>
+                    <Label x:Name="gpuName" Content="Name:" Grid.Row="1" HorizontalAlignment="Left" Margin="10,44,0,0" VerticalAlignment="Top" FontSize="14"/>
+                    <Label x:Name="gpuVram" Content="VRAM:" Grid.Row="1" HorizontalAlignment="Left" Margin="10,73,0,0" VerticalAlignment="Top" FontSize="14"/>
+                    <Label x:Name="gpuResolution" Content="Resolution:" Grid.Row="1" HorizontalAlignment="Left" Margin="10,102,0,0" VerticalAlignment="Top" FontSize="14"/>
+                    <Label x:Name="gpuRefreshRate" Content="Refresh Rate:" Grid.Row="1" HorizontalAlignment="Left" Margin="10,131,0,0" VerticalAlignment="Top" FontSize="14"/>
 
-                <!--RAM-->
-                <Label Content="RAM:" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="18"/>
-                <ComboBox x:Name="ramCb" HorizontalAlignment="Left" Margin="133,16,0,0" VerticalAlignment="Top" Width="120" Grid.Column="2" SelectionChanged="Cb_SelectionChange"/>
-                <Label x:Name="ramName" Content="Name:" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" Margin="10,44,0,0" VerticalAlignment="Top" FontSize="14"/>
-                <Label x:Name="ramManufacturer" Content="Manufacturer:" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" Margin="10,73,0,0" VerticalAlignment="Top" FontSize="14"/>
-                <Label x:Name="ramTag" Content="Tag:" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" Margin="10,102,0,0" VerticalAlignment="Top" FontSize="14"/>
-                <Label x:Name="ramCapacity" Content="Capacity:" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" Margin="10,131,0,0" VerticalAlignment="Top" FontSize="14"/>
-
-
-                <!--MotherBoard-->
-                <Label Content="Motherboard:" Grid.Row="1" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="18"/>
-                <Label x:Name="mbManufacturer" Content="Manufacturer:" Grid.Row="1" HorizontalAlignment="Left" Margin="10,44,0,0" VerticalAlignment="Top" FontSize="14"/>
-                <Label x:Name="mbProduct" Content="Product:" Grid.Row="1" HorizontalAlignment="Left" Margin="10,73,0,0" VerticalAlignment="Top" FontSize="14"/>
+                    <!--RAM-->
+                    <Label Content="RAM:" Grid.Row="2" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="18"/>
+                    <ComboBox x:Name="ramCb" Grid.Row="2" HorizontalAlignment="Left" Margin="132,16,0,0" VerticalAlignment="Top" Width="150" SelectionChanged="Cb_SelectionChange"/>
+                    <Label x:Name="ramName" Content="Name:" Grid.Row="2" HorizontalAlignment="Left" Margin="10,44,0,0" VerticalAlignment="Top" FontSize="14"/>
+                    <Label x:Name="ramManufacturer" Content="Manufacturer:" Grid.Row="2" HorizontalAlignment="Left" Margin="10,73,0,0" VerticalAlignment="Top" FontSize="14"/>
+                    <Label x:Name="ramTag" Content="Tag:" Grid.Row="2" HorizontalAlignment="Left" Margin="10,102,0,0" VerticalAlignment="Top" FontSize="14"/>
+                    <Label x:Name="ramCapacity" Content="Capacity:" Grid.Row="2" HorizontalAlignment="Left" Margin="10,131,0,0" VerticalAlignment="Top" FontSize="14"/>
 
 
-                <!--Disks-->
-                <Label Content="Disks:" Grid.Row="1" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="18" Grid.Column="1"/>
-                <ComboBox x:Name="diskCb" Grid.Column="1" HorizontalAlignment="Left" Margin="132,16,0,0" Grid.Row="1" VerticalAlignment="Top" Width="120" SelectionChanged="Cb_SelectionChange"/>
-                <Label x:Name="diskManufacturer" Content="Manufacturer:" Grid.Row="1" HorizontalAlignment="Left" Margin="10,44,0,0" VerticalAlignment="Top" FontSize="14" Grid.Column="1"/>
-                <Label x:Name="diskInterface" Content="Interface:" Grid.Row="1" HorizontalAlignment="Left" Margin="10,73,0,0" VerticalAlignment="Top" FontSize="14" Grid.Column="1"/>
-                <Label x:Name="diskSize" Content="Size:" Grid.Row="1" HorizontalAlignment="Left" Margin="10,102,0,0" VerticalAlignment="Top" FontSize="14" Grid.Column="1"/>
+                    <!--MotherBoard-->
+                    <Label Content="Motherboard:" Grid.Row="3" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="18"/>
+                    <Label x:Name="mbManufacturer" Content="Manufacturer:" Grid.Row="3" HorizontalAlignment="Left" Margin="10,44,0,0" VerticalAlignment="Top" FontSize="14"/>
+                    <Label x:Name="mbProduct" Content="Product:" Grid.Row="3" HorizontalAlignment="Left" Margin="10,73,0,0" VerticalAlignment="Top" FontSize="14"/>
 
-                <!--Drives-->
-                <Label Content="Drives:" Grid.Row="1" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="18" Grid.Column="2"/>
-                <ComboBox x:Name="driveCb" Grid.Column="2" HorizontalAlignment="Left" Margin="133,16,0,0" Grid.Row="1" VerticalAlignment="Top" Width="120" SelectionChanged="Cb_SelectionChange"/>
-                <Label x:Name="driveRootDir" Content="Root Directory:" Grid.Row="1" HorizontalAlignment="Left" Margin="10,44,0,0" VerticalAlignment="Top" FontSize="14" Grid.Column="2"/>
-                <Label x:Name="driveFileSystem" Content="File System:" Grid.Row="1" HorizontalAlignment="Left" Margin="10,73,0,0" VerticalAlignment="Top" FontSize="14" Grid.Column="2"/>
-                <Label x:Name="driveTotalSize" Content="Total Size:" Grid.Row="1" HorizontalAlignment="Left" Margin="10,102,0,0" VerticalAlignment="Top" FontSize="14" Grid.Column="2"/>
-                <Label x:Name="driveAvailableSpace" Content="Available Space:" Grid.Row="1" HorizontalAlignment="Left" Margin="10,131,0,0" VerticalAlignment="Top" FontSize="14" Grid.Column="2"/>
-            </Grid>
+
+                    <!--Disks-->
+                    <Label Content="Disks:" Grid.Row="4" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="18"/>
+                    <ComboBox x:Name="diskCb" HorizontalAlignment="Left" Margin="132,16,0,0" Grid.Row="4" VerticalAlignment="Top" Width="150" SelectionChanged="Cb_SelectionChange"/>
+                    <Label x:Name="diskManufacturer" Content="Manufacturer:" Grid.Row="4" HorizontalAlignment="Left" Margin="10,44,0,0" VerticalAlignment="Top" FontSize="14"/>
+                    <Label x:Name="diskInterface" Content="Interface:" Grid.Row="4" HorizontalAlignment="Left" Margin="10,73,0,0" VerticalAlignment="Top" FontSize="14"/>
+                    <Label x:Name="diskSize" Content="Size:" Grid.Row="4" HorizontalAlignment="Left" Margin="10,102,0,0" VerticalAlignment="Top" FontSize="14"/>
+
+                    <!--Drives-->
+                    <Label Content="Drives:" Grid.Row="5" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="18"/>
+                    <ComboBox x:Name="driveCb" HorizontalAlignment="Left" Margin="133,16,0,0" Grid.Row="5" VerticalAlignment="Top" Width="150" SelectionChanged="Cb_SelectionChange"/>
+                    <Label x:Name="driveRootDir" Content="Root Directory:" Grid.Row="5" HorizontalAlignment="Left" Margin="10,44,0,0" VerticalAlignment="Top" FontSize="14"/>
+                    <Label x:Name="driveFileSystem" Content="File System:" Grid.Row="5" HorizontalAlignment="Left" Margin="10,73,0,0" VerticalAlignment="Top" FontSize="14"/>
+                    <Label x:Name="driveTotalSize" Content="Total Size:" Grid.Row="5" HorizontalAlignment="Left" Margin="10,102,0,0" VerticalAlignment="Top" FontSize="14"/>
+                    <Label x:Name="driveAvailableSpace" Content="Available Space:" Grid.Row="5" HorizontalAlignment="Left" Margin="10,131,0,0" VerticalAlignment="Top" FontSize="14"/>
+                </Grid>
+            </ScrollViewer>
         </TabItem>
         <TabItem Header="Sensor Values">
             <ScrollViewer>
