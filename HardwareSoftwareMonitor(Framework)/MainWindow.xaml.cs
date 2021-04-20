@@ -6,12 +6,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Management;
-using System.Windows;
 using System.Windows.Threading;
+using Excel = Microsoft.Office.Interop.Excel;
 
 namespace HardwareSoftwareMonitor_Framework_
 {
-    public partial class MainWindow : Window
+    public partial class MainWindow : System.Windows.Window
     {
         string[] SizeSuffixes = { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
         ManagementObjectSearcher searcher;
@@ -420,6 +420,119 @@ namespace HardwareSoftwareMonitor_Framework_
         {
             SavePrograms();
             SaveHardwareInfo();
+            SaveToExcel();
+        }
+
+        private void SaveToExcel()
+        {
+            Excel.Application app = new Excel.Application();
+            app.Visible = false;
+            app.DisplayAlerts = false;
+            Excel.Workbook wb = app.Workbooks.Add();
+            wb.Worksheets.Add();
+
+            //Installed Apps worksheet
+            Excel._Worksheet installedApps = app.Worksheets[app.Worksheets.Count -1];
+            installedApps.Name = "Installed Applications";
+            installedApps.Cells[1, 1].Value = "Name:";
+            installedApps.Cells[1, 2].Value = "Version:";
+            for (int i = 0; i < apps.Count; i++)
+            {
+                installedApps.Cells[i+2, 1].Value = apps[i].Name;
+                installedApps.Cells[i+2, 2].Value = $"{apps[i].Version}";
+            }
+            installedApps.Columns.AutoFit();
+
+            //Hardware Infos worksheet
+            Excel._Worksheet hardawreInfos = app.Worksheets[app.Worksheets.Count];
+            hardawreInfos.Name = "Hardware Informations";
+            hardawreInfos.Cells[1, 1] = "CPU:";
+            hardawreInfos.Cells[2, 1] = "Name";
+            hardawreInfos.Cells[3, 1] = "Manufacturer";
+            hardawreInfos.Cells[4, 1] = "Cores";
+            hardawreInfos.Cells[5, 1] = "Threads";
+            hardawreInfos.Cells[6, 1] = "L2 Chache";
+            hardawreInfos.Cells[7, 1] = "L3 Chache";
+
+            for (int i = 0; i < cpus.Count; i++)
+            {
+                hardawreInfos.Cells[2, i + 2] = cpus[i].Name;
+                hardawreInfos.Cells[3, i + 2] = cpus[i].Manufacturer;
+                hardawreInfos.Cells[4, i + 2] = $"{cpus[i].Cores}";
+                hardawreInfos.Cells[5, i + 2] = $"{cpus[i].Threads}";
+                hardawreInfos.Cells[6, i + 2] = $"{cpus[i].L2Size /1024} MB";
+                hardawreInfos.Cells[7, i + 2] = $"{cpus[i].L3Size /1024} MB";
+            }
+
+            hardawreInfos.Cells[9, 1] = "GPU:";
+            hardawreInfos.Cells[10, 1] = "Name";
+            hardawreInfos.Cells[11, 1] = "Vram";
+            hardawreInfos.Cells[12, 1] = "Resolution";
+            hardawreInfos.Cells[13, 1] = "Refresh Rate";
+
+            for (int i = 0; i < gpus.Count; i++)
+            {
+                hardawreInfos.Cells[10, i + 2] = gpus[i].Name;
+                hardawreInfos.Cells[11, i + 2] = SizeSuffix(gpus[i].Vram);
+                hardawreInfos.Cells[12, i + 2] = $"{ gpus[i].HorizontalRes}x{gpus[i].VerticalRes}";
+                hardawreInfos.Cells[13, i + 2] = $"{gpus[i].RefreshRate} Hz";
+            }
+
+            hardawreInfos.Cells[15, 1] = "RAM:";
+            hardawreInfos.Cells[16, 1] = "Name";
+            hardawreInfos.Cells[17, 1] = "Manufacturer";
+            hardawreInfos.Cells[18, 1] = "Tag";
+            hardawreInfos.Cells[19, 1] = "Capacity";
+
+            for (int i = 0; i < rams.Count; i++)
+            {
+                hardawreInfos.Cells[16, i + 2] = rams[i].Name;
+                hardawreInfos.Cells[17, i + 2] = rams[i].Manufacturer;
+                hardawreInfos.Cells[18, i + 2] = rams[i].Tag;
+                hardawreInfos.Cells[19, i + 2] = SizeSuffix(rams[i].Capacity);
+            }
+
+            hardawreInfos.Cells[21, 1] = "Motherboard:";
+            hardawreInfos.Cells[22, 1] = "Manufacturer:";
+            hardawreInfos.Cells[23, 1] = "Product:";
+            hardawreInfos.Cells[22, 2] = mb.Manufacturer;
+            hardawreInfos.Cells[23, 2] = mb.Product;
+
+            hardawreInfos.Cells[25, 1] = "Disks:";
+            hardawreInfos.Cells[26, 1] = "Manufacturer";
+            hardawreInfos.Cells[27, 1] = "Interface";
+            hardawreInfos.Cells[28, 1] = "Size";
+
+            for (int i = 0; i < disks.Count; i++)
+            {
+                hardawreInfos.Cells[26, i+2] = disks[i].Manufacturer;
+                hardawreInfos.Cells[27, i+2] = disks[i].InterfaceType;
+                hardawreInfos.Cells[28, i+2] = SizeSuffix(disks[i].Size);
+            }
+
+            hardawreInfos.Cells[30, 1] = "Drives:";
+            hardawreInfos.Cells[31, 1] = "Root Dir";
+            hardawreInfos.Cells[32, 1] = "File System";
+            hardawreInfos.Cells[33, 1] = "Total Size";
+            hardawreInfos.Cells[34, 1] = "Available Space";
+
+            for (int i = 0; i < drives.Count; i++)
+            {
+                hardawreInfos.Cells[31, i + 2] = drives[i].RootDir;
+                hardawreInfos.Cells[32, i + 2] = drives[i].FileSystem;
+                hardawreInfos.Cells[33, i + 2] = SizeSuffix(drives[i].TotalSize);
+                hardawreInfos.Cells[34, i + 2] = SizeSuffix(drives[i].AvailableSpace);
+            }
+            hardawreInfos.Columns.AutoFit();
+
+            //Saving
+            wb.SaveAs($@"{AppDomain.CurrentDomain.BaseDirectory}..\..\save\infos", Excel.XlFileFormat.xlWorkbookDefault,
+                Type.Missing, Type.Missing, Type.Missing,
+                Type.Missing, Excel.XlSaveAsAccessMode.xlExclusive,
+                Type.Missing, Type.Missing, Type.Missing,
+                Type.Missing, Type.Missing);
+            wb.Close();
+            app = null;
         }
 
         private void SaveHardwareInfo()
