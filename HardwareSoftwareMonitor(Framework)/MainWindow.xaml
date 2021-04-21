@@ -135,5 +135,12 @@
                 </DataGrid>
             </Grid>
         </TabItem>
+        <TabItem Header="Other">
+            <Grid>
+                <Label Content="Save Locations:" Margin="10,10,526,427" FontSize="18"/>
+                <TextBox x:Name="SavePath" HorizontalAlignment="Left" Height="23" Margin="10,54,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="500" IsReadOnly="True"/>
+                <Button Content="..." HorizontalAlignment="Left" Margin="515,57,0,0" VerticalAlignment="Top" Width="49" Click="BrowsePath"/>
+            </Grid>
+        </TabItem>
     </TabControl>
 </Window>

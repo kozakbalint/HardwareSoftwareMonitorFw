@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Management;
+using System.Windows.Forms;
 using System.Windows.Threading;
 using Excel = Microsoft.Office.Interop.Excel;
 
@@ -29,7 +30,8 @@ namespace HardwareSoftwareMonitor_Framework_
         Computer computer;
         DispatcherTimer timer;
         StreamWriter sw;
-
+        string savePath = AppDomain.CurrentDomain.BaseDirectory;
+        
         public MainWindow()
         {
             InitializeComponent();
@@ -38,6 +40,7 @@ namespace HardwareSoftwareMonitor_Framework_
 
         private void Init()
         {
+            SavePath.Text = savePath;
             softDG.ItemsSource = apps;
             computer = new Computer() { CPUEnabled = true, GPUEnabled = true, MainboardEnabled = true, RAMEnabled = true, HDDEnabled = true };
             computer.Open();
@@ -526,18 +529,26 @@ namespace HardwareSoftwareMonitor_Framework_
             hardawreInfos.Columns.AutoFit();
 
             //Saving
-            wb.SaveAs($@"{AppDomain.CurrentDomain.BaseDirectory}..\..\save\infos", Excel.XlFileFormat.xlWorkbookDefault,
+            try
+            {
+                wb.SaveAs($"{savePath}\\infos", Excel.XlFileFormat.xlWorkbookDefault,
                 Type.Missing, Type.Missing, Type.Missing,
                 Type.Missing, Excel.XlSaveAsAccessMode.xlExclusive,
                 Type.Missing, Type.Missing, Type.Missing,
                 Type.Missing, Type.Missing);
-            wb.Close();
-            app = null;
+                wb.Close();
+                app = null;
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Save was failed, because the save folder is readonly.");
+            }
+
         }
 
         private void SaveHardwareInfo()
         {
-            sw = new StreamWriter("../../save/hardware_save.csv");
+            sw = new StreamWriter($"{savePath}\\hardware_save.csv");
             sw.WriteLine($"{mb.Manufacturer},{mb.Product}");
             foreach (var item in cpus)
             {
@@ -545,31 +556,39 @@ namespace HardwareSoftwareMonitor_Framework_
             }
             foreach (var item in gpus)
             {
-                sw.WriteLine($"{item.Name};{item.Vram},{item.HorizontalRes},{item.VerticalRes},{item.RefreshRate}");
+                sw.WriteLine($"{item.Name};{SizeSuffix(item.Vram)},{item.HorizontalRes},{item.VerticalRes},{item.RefreshRate}");
             }
             foreach (var item in rams)
             {
-                sw.WriteLine($"{item.Name},{item.Manufacturer},{item.Tag},{item.Capacity}");
+                sw.WriteLine($"{item.Name},{item.Manufacturer},{item.Tag},{SizeSuffix(item.Capacity)}");
             }
             foreach (var item in disks)
             {
-                sw.WriteLine($"{item.Manufacturer},{item.InterfaceType},{item.Size}");
+                sw.WriteLine($"{item.Manufacturer},{item.InterfaceType},{SizeSuffix(item.Size)}");
             }
             foreach (var item in drives)
             {
-                sw.WriteLine($"{item.RootDir},{item.FileSystem},{item.TotalSize},{item.AvailableSpace}");
+                sw.WriteLine($"{item.RootDir},{item.FileSystem},{SizeSuffix(item.TotalSize)},{SizeSuffix(item.AvailableSpace)}");
             }
             sw.Close();
         }
 
         private void SavePrograms()
         {
-            sw = new StreamWriter("../../save/app_save.csv");
+            sw = new StreamWriter($"{savePath}\\app_save.csv");
             foreach (var item in apps)
             {
                 sw.WriteLine($"{item.Name},{item.Version}");
             }
             sw.Close();
+        }
+
+        private void BrowsePath(object sender, System.Windows.RoutedEventArgs e)
+        {
+            FolderBrowserDialog fd = new FolderBrowserDialog();
+            fd.ShowDialog();
+            savePath = fd.SelectedPath;
+            SavePath.Text = fd.SelectedPath;
         }
     }
 }
